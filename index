@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>萎びた影リーサル計算ツール</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 20px;
+      background-color: #f1f1f1;
+      color: #333;
+    }
+    h2 {
+      text-align: center;
+      color: #444;
+    }
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-top: 12px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      width: 100%;
+      margin-top: 20px;
+      padding: 12px;
+      font-size: 18px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 18px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>🧮 萎びた影リーサル計算</h2>
+
+    <label>敵のライフ（HP）</label>
+    <input type="number" id="hp" value="30" min="1">
+
+    <label>攻撃力（影1体）</label>
+    <input type="number" id="atk" value="6" min="1">
+
+    <label>敵の回復量（影1枚ごと）</label>
+    <input type="number" id="heal" value="3" min="0">
+
+    <button onclick="calculate()">計算する</button>
+
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    function calculate() {
+      const hp = parseFloat(document.getElementById('hp').value);
+      const atk = parseFloat(document.getElementById('atk').value);
+      const heal = parseFloat(document.getElementById('heal').value);
+      const resultDiv = document.getElementById('result');
+
+      if (atk <= heal) {
+        resultDiv.innerHTML = "❌ リーサル不可（攻撃力 ≤ 回復量）";
+        return;
+      }
+
+      const eff = atk - heal;
+      const rest = hp - atk;
+      const totalCards = Math.ceil(rest / eff) + 1;
+      const turnsIfTwoPerTurn = Math.ceil(totalCards / 2);
+
+      resultDiv.innerHTML = `
+        ✅ 必要な萎びた影の枚数：<strong>${totalCards}枚</strong><br>
+        🕒 1ターンに2枚出せる場合：<strong>${turnsIfTwoPerTurn}ターン</strong>
+      `;
+    }
+  </script>
+</body>
+</html>
